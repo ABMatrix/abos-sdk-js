@@ -1,58 +1,56 @@
 
 
-[中文文档](https://github.com/ABMatrix/abos-sdk-js/blob/master/README-zh-CN.md)
+# 概述
 
-# About
+`abos-sdk` 是一个方法, 他接收 `provider` 和 `Web3 Class`(可选) 作为参数, 返回一个支持 ABOS 的 sdk 实例. 该实例下多个对象的使用方法, 如 `sdk.utils`, `sdk.eth`, `sdk.shh`, `sdk.bzz` 均与 [web3](https://web3js.readthedocs.io/en/1.0/getting-started.html) 相同.
 
-`abos-sdk` is a function takes `provider` and `Web3 Class`(optional) as inputs, returns cita-supported web3 instance, methods of `sdk.utils`, `sdk.eth`, `sdk.shh`, `sdk.bzz` are same as [web3](https://web3js.readthedocs.io/en/1.0/getting-started.html)
+# 需注意
 
-# Notice
+Websocket 链接已支持, 但是 pub/sub 模式尚未在 ABOS 上实现.
 
-Websocket is supported, but the pub/sub is not completed in ABOS for now.
+# 版本
 
-# Version
+`abos-sdk` 严格遵守 Semver, 并与 ABOS 的 MAJOR 和 MINOR 版本号保持一致.
 
-`abos-sdk` strictly abides by Semver, and is compatible with ABOS by `MAJOR` and `MINOR` version, e.g. `abos-sdk@0.23.x` will work perfectly with `ABOS@0.23`
+# 预备知识
 
-# Prerequisites
+## 学习 `web3@1.0`
 
-## Learn `web3@1.0`
+如无特别声明, `abos-sdk` 的使用与 [`web3@1.0.0`](https://web3js.readthedocs.io/en/1.0/getting-started.html) 一致.
 
-By default, `abos-sdk` acts like [`web3@1.0.0`](https://web3js.readthedocs.io/en/1.0/getting-started.html), and has the same APIs.
+## 学习 `ABOS`
 
-## Learn `ABOS`
+`abos-sdk` 用于 ABOS 相关服务.
 
-`abos-sdk` works for ABOS.
+使用 SDK 前请先了解以下概念.
 
-Before using this SDK, following concept should be cast.
+1. 交易对象
 
-1. Transaction Object
+待签名的交易对象的 Proto 描述 [cita-proto](https://github.com/ABMatrix/cita-proto/blob/master/blockchain.proto)
 
-Transaction Object to be signed has been defined in [cita-proto](https://github.com/ABMatrix/cita-proto/blob/master/blockchain.proto)
+ABOS 返回的交易对象 [here](https://github.com/cryptape/cita/blob/develop/docs/zh-CN/rpc_guide/rpc.md#gettransaction)
 
-Transaction Object returned from ABOS has been declared [here](https://github.com/cryptape/cita/blob/develop/docs/zh-CN/rpc_guide/rpc.md#gettransaction)
+2. 交易回执
 
-2. Transaction Receipt
+[交易回执](https://github.com/cryptape/cita/blob/develop/docs/zh-CN/rpc_guide/rpc.md#gettransactionreceipt)
 
-[Transaction Receipt](https://github.com/cryptape/cita/blob/develop/docs/zh-CN/rpc_guide/rpc.md#gettransactionreceipt)
+3. 区块对象
 
-3. Block Object
+[区块对象](https://github.com/cryptape/cita/blob/develop/docs/zh-CN/rpc_guide/rpc.md#getblockbyhash)
 
-[Block Object](https://github.com/cryptape/cita/blob/develop/docs/zh-CN/rpc_guide/rpc.md#getblockbyhash)
+4. 元数据对象
 
-4. MetaData Object
-
-[MetaData Object](https://github.com/cryptape/cita/blob/develop/docs/zh-CN/rpc_guide/rpc.md#getmetadata)
+[元数据对象](https://github.com/cryptape/cita/blob/develop/docs/zh-CN/rpc_guide/rpc.md#getmetadata)
 
 5. ABI
 
 [ABI](https://solidity.readthedocs.io/en/v0.4.25/abi-spec.html)
 
-6. Filter Object
+6. Filter 对象
 
-[Filter Object](https://docs.citahub.com/en-US/cita/rpc-guide/rpc#newfilter)
+[Filter 对象](https://docs.citahub.com/en-US/cita/rpc-guide/rpc#newfilter)
 
-7. Transaction Log
+7. 交易日志
 
 ````javascript
 Log {
@@ -69,34 +67,32 @@ Log {
 }
 ``
 
-# Getting Started
+# 快速开始
 
-To use `abos-sdk`, you can add it via yarn
+可以通过 yarn 安装 `abos-sdk`
 
 ```shell
 yarn add git remote https://github.com/ABMatrix/abos-sdk-js.git 
 ````
 
-or to link it in browser directly with
+或者直接通过 script 标签引入
 
 ```html
 <script src="node_modules/abos-sdk/lib/bundle.js" />
 ```
 
-# Add `sdk.js`
+# 创建 `sdk.js`
 
 ```javascript
-import ABOSSDK from 'abos-sdk' 
-// or 
-// const ABOSSDK = require('abos-sdk').default;
+import ABOSSDK from 'abos-sdk'
 const sdk = ABOSSDK('http://localhost:1337')
 ```
 
 # ABOS SDK
 
-`sdk.base` allows you to interact with an ABOS Blockchain and ABOS Smart Contract.
+通过 `sdk.base` 与 ABOS 链和 ABOS 智能合约交互.
 
-## RPC API Reference
+## RPC API 参考
 
 ### peerCount
 
@@ -592,7 +588,7 @@ sdk.listeners.listenToTransactionReceipt(result.hash).then(console.log)
 
 ## System Contracts API
 
-System contracts locating in `sdk.system` can be used as normal contracts.
+系统合约位于 `sdk.system`, 使用方法与一般合约相同.
 
 ```javascript
 sdk.system.admin
@@ -610,9 +606,9 @@ sdk.system.sysConfig
 sdk.system.versionManage
 ```
 
-Corresponding methods can be found [here](https://docs.citahub.com/en-US/cita/system/system-contracts#batch-transaction)
+对应合约方法可以在 [这里](https://docs.citahub.com/en-US/cita/system/system-contracts#batch-transaction) 查看.
 
-## Additional Utils
+## 其他功能
 
 ```javascript
 /**
